@@ -71,6 +71,8 @@ __attribute__((constructor)) static void initialize_patch() {
     return;
   }
 
+  mach_vm_protect(mach_task_self(), target_page, page_size, FALSE, VM_PROT_READ | VM_PROT_EXECUTE);
+
   // copy original data to our new page. at least bnow you can read the
   // executable page, so memcpy works
   memcpy((void *)writable_addr, (void *)target_page, page_size);

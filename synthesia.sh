@@ -1,3 +1,4 @@
 #!/bin/bash
-cd "$(dirname "$0")"
-DYLD_INSERT_LIBRARIES=hook.dylib ./Synthesia.o
+DIR="$(cd "$(dirname "$0")"; pwd)"
+export DYLD_INSERT_LIBRARIES="$DIR/hook.dylib"
+exec "$DIR/Synthesia.o" > /dev/null 2>&1
