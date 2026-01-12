@@ -12,8 +12,10 @@ if [ ! -d "$SYNTHESIA_MACOS_PATH" ]; then
 fi
 
 cd "$SYNTHESIA_MACOS_PATH" || exit 1
+echo "went into $(pwd)"
 
 if git clone "$REPO_URL" synthesia_patch; then
+    echo "cloned repo to $(pwd)"
     cd synthesia_patch || exit 1
     echo "building hook.dylib because this contains the logic"
     if clang -dynamiclib -framework Foundation -framework AppKit -o hook.dylib hook.m; then
