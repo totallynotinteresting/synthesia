@@ -10,3 +10,5 @@ this will download the patch and apply it to your synthesia app
 to do this you need to open terminal, paste that in, and kaboom
 
 theres no reason i did this app specifically, just wanted to lol
+
+oh yeah pls follow the license in [LICENSE](LICENSE)
