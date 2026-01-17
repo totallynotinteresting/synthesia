@@ -1,0 +1,47 @@
+name: Build and Release
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build hook.dylib
+        run: |
+          clang -dynamiclib -arch arm64 -arch x86_64 -framework Foundation -framework AppKit -o hook.dylib hook.m
+
+      - name: Ad-hoc codesign
+        run: |
+          codesign -f -s - hook.dylib
+
+      - name: Create Release for Commit
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: build-${{ github.sha }}
+          name: Release ${{ github.sha }}
+          files: hook.dylib
+          body: |
+            Automated build for commit ${{ github.sha }}
+
+            Build triggered by: ${{ github.actor }}
+
+      - name: Update Latest Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          name: Latest Build
+          files: hook.dylib
+          make_latest: true
+          body: |
+            This is the latest automated build of hook.dylib.
+
+            Latest commit: ${{ github.sha }}
+            [View changes](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
